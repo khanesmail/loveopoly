@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>Loveopoly – Couple Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pink:#e91e63;--pink-light:#f48fb1;--pink-dark:#c2185b;--pink-pale:#fce4ec;
+  --purple:#7b1fa2;--purple-light:#ab47bc;
+  --cream:#fff8fb;--white:#fff;
+  --text:#3a1a2a;--text-soft:#9a6070;
+  --radius:18px;--radius-sm:12px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--cream);
+  display:flex;flex-direction:column;
+  height:100dvh;
+  overflow:hidden;
+}
+
+/* ── HEADER ── */
+.header{
+  background:linear-gradient(135deg,var(--pink-dark),var(--pink),#f06292);
+  padding:14px 16px 12px;
+  text-align:center;
+  flex-shrink:0;
+  position:relative;
+  box-shadow:0 4px 20px #e91e6340;
+}
+.header-hearts{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.hh{position:absolute;opacity:0.2;animation:hfloat 4s ease-in-out infinite;}
+@keyframes hfloat{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-6px) scale(1.1);}}
+.logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:#fff;letter-spacing:0.01em;text-shadow:0 2px 8px #00000033;line-height:1;}
+.logo span{color:#ffd6e7;}
+.logo-sub{font-size:10px;color:#ffd6e7cc;letter-spacing:0.18em;text-transform:uppercase;margin-top:2px;font-weight:700;}
+
+/* ── LEVEL SELECTOR ── */
+.level-section{
+  padding:10px 12px 8px;
+  flex-shrink:0;
+  background:#fff;
+  border-bottom:1px solid #fce4ec;
+}
+.level-label{font-size:9px;font-weight:900;letter-spacing:0.14em;text-transform:uppercase;color:var(--pink);margin-bottom:6px;}
+.level-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.lvl-btn{
+  padding:8px 4px;border-radius:10px;border:2px solid #fce4ec;
+  background:#fff5f8;font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;
+  letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;
+  color:#c48090;transition:all 0.2s cubic-bezier(.34,1.3,.64,1);
+  position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;
+}
+.lv-icon{font-size:18px;line-height:1;}
+.check{display:none;position:absolute;top:4px;right:5px;width:14px;height:14px;border-radius:50%;background:var(--pink);color:#fff;font-size:8px;align-items:center;justify-content:center;font-weight:900;}
+.lvl-btn.active .check{display:flex;}
+.lvl-btn.easy.active{background:linear-gradient(145deg,#fff0f8,#fce4ec);border-color:#f06292;color:#c2185b;transform:scale(1.04);box-shadow:0 0 0 3px #f4849444,0 4px 14px #e91e6328;}
+.lvl-btn.medium.active{background:linear-gradient(145deg,#fce4ec,#ffb3c6);border-color:var(--pink);color:#880e4f;transform:scale(1.04);box-shadow:0 0 0 3px #e91e6344,0 4px 14px #e91e6335;}
+.lvl-btn.hard.active{background:linear-gradient(145deg,#ffd6e7,#f48fb1);border-color:var(--pink-dark);color:#560027;transform:scale(1.04);box-shadow:0 0 0 3px #c2185b55,0 4px 14px #c2185b44;}
+
+/* ── CARD DECKS ROW ── */
+.decks-section{
+  padding:8px 12px;flex-shrink:0;
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+  background:#fff;border-bottom:1px solid #fce4ec;
+}
+.deck-btn{
+  border-radius:10px;border:2px dashed;padding:8px 8px 7px;
+  cursor:pointer;text-align:center;font-family:'Nunito',sans-serif;
+  font-weight:800;font-size:10px;letter-spacing:0.04em;
+  transition:all 0.18s;display:flex;flex-direction:column;align-items:center;gap:2px;
+  -webkit-user-select:none;user-select:none;
+}
+.deck-btn:active{transform:scale(0.96);}
+.deck-btn.twist{border-color:var(--purple-light);background:#f9f0ff;color:var(--purple);}
+.deck-btn.chest{border-color:var(--pink);background:#fff0f5;color:var(--pink-dark);}
+.deck-icon{font-size:20px;line-height:1;}
+.deck-tag{display:inline-block;margin-top:2px;padding:1px 7px;border-radius:99px;font-size:8px;font-weight:900;letter-spacing:0.07em;}
+.deck-btn.twist .deck-tag{background:#e1bee7;color:#6a1b9a;}
+.deck-btn.chest .deck-tag{background:#fce4ec;color:var(--pink-dark);}
+
+/* ── BOARD AREA ── */
+.board-section{
+  flex:1;overflow:hidden;padding:8px;
+  display:flex;align-items:center;justify-content:center;
+}
+.board{
+  display:grid;
+  grid-template-columns:1.15fr repeat(9,1fr) 1.15fr;
+  grid-template-rows:1.15fr repeat(9,1fr) 1.15fr;
+  gap:2px;
+  width:min(100%,100vw - 16px);
+  aspect-ratio:1;
+  background:linear-gradient(145deg,#ad1457,#880e4f);
+  padding:4px;border-radius:16px;
+  box-shadow:0 8px 32px #880e4f44,inset 0 1px 0 #ffffff22;
+}
+.tile{
+  min-width:0;min-height:0;border:none;border-radius:5px;
+  cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;
+  transition:transform 0.15s,box-shadow 0.12s;
+  box-shadow:inset 0 1px 0 #ffffff44;
+  position:relative;
+  -webkit-user-select:none;user-select:none;
+}
+.tile:active:not(.filler){transform:scale(0.93);}
+.tile.filler{cursor:default;opacity:0.88;}
+.tile.corner{border-radius:7px;box-shadow:inset 0 2px 0 #ffffff55;}
+.tile.active{z-index:3;}
+.tile.active.easy{box-shadow:0 0 0 2px #fff,0 0 0 3.5px #f06292,0 3px 12px #00000033;}
+.tile.active.medium{box-shadow:0 0 0 2px #fff,0 0 0 3.5px #e91e63,0 3px 12px #00000033;}
+.tile.active.hard{box-shadow:0 0 0 2px #fff,0 0 0 3.5px #c2185b,0 3px 12px #00000033;}
+.tile-inner{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;gap:1px;padding:2px 1px;width:100%;height:100%;
+  transform:rotate(var(--rot,0deg));pointer-events:none;
+}
+.tile .tnum{font-size:6px;font-weight:900;letter-spacing:0.03em;color:#ffffffcc;margin:0;line-height:1;}
+.tile .ticon{font-size:clamp(10px,2.6vw,15px);line-height:1;margin:0;}
+
+/* board center */
+.board-center{
+  grid-row:2/11;grid-column:2/11;z-index:1;
+  background:linear-gradient(160deg,#fff8fb,#fce4ec 60%,#f8bbd9);
+  border-radius:12px;border:1.5px solid #f48fb1;
+  box-shadow:inset 0 0 18px #ffffff80;
+  padding:6px 8px 8px;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  overflow:hidden;gap:5px;
+}
+.center-title{font-family:'Playfair Display',serif;font-size:clamp(12px,3.8vw,20px);font-weight:900;color:#212121;line-height:1;letter-spacing:-0.02em;text-align:center;}
+.center-title .love{color:var(--pink);}
+.center-sub{font-size:clamp(6px,1.6vw,9px);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#ad1457;line-height:1;}
+
+/* mini level in center */
+.center-levels{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;width:100%;}
+.clvl{
+  padding:4px 2px 3px;border-radius:7px;border:1.5px solid #fce4ec;
+  background:#fff9fb;font-family:'Nunito',sans-serif;font-size:7.5px;font-weight:900;
+  letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;
+  color:#c48090;transition:all 0.2s cubic-bezier(.34,1.3,.64,1);
+  display:flex;flex-direction:column;align-items:center;gap:1px;position:relative;
+}
+.clvl .ci{font-size:12px;line-height:1;}
+.clvl .ck{display:none;position:absolute;top:2px;right:3px;width:10px;height:10px;border-radius:50%;background:var(--pink);color:#fff;font-size:6px;align-items:center;justify-content:center;font-weight:900;}
+.clvl.active .ck{display:flex;}
+.clvl.easy.active{background:linear-gradient(145deg,#fff0f8,#fce4ec);border-color:#f06292;color:#c2185b;transform:scale(1.05);box-shadow:0 0 0 2px #f4849455;}
+.clvl.medium.active{background:linear-gradient(145deg,#fce4ec,#ffb3c6);border-color:var(--pink);color:#880e4f;transform:scale(1.05);box-shadow:0 0 0 2px #e91e6355;}
+.clvl.hard.active{background:linear-gradient(145deg,#ffd6e7,#f48fb1);border-color:var(--pink-dark);color:#560027;transform:scale(1.05);box-shadow:0 0 0 2px #c2185b66;}
+
+/* mini decks in center */
+.center-decks{display:grid;grid-template-columns:1fr 1fr;gap:3px;width:100%;}
+.cdeck{
+  border-radius:7px;border:1.5px dashed;padding:4px 4px 3px;
+  cursor:pointer;text-align:center;font-family:'Nunito',sans-serif;
+  font-weight:800;font-size:7px;letter-spacing:0.04em;
+  display:flex;flex-direction:column;align-items:center;gap:1px;
+  -webkit-user-select:none;user-select:none;transition:all 0.15s;
+}
+.cdeck:active{transform:scale(0.94);}
+.cdeck.twist{border-color:var(--purple-light);background:#f9f0ffcc;color:var(--purple);}
+.cdeck.chest{border-color:var(--pink);background:#fff0f5cc;color:var(--pink-dark);}
+.cdeck .cdi{font-size:14px;line-height:1;}
+.cdeck .cdt{padding:1px 5px;border-radius:99px;font-size:6px;font-weight:900;margin-top:1px;}
+.cdeck.twist .cdt{background:#e1bee7;color:#6a1b9a;}
+.cdeck.chest .cdt{background:#fce4ec;color:var(--pink-dark);}
+
+/* action panel inside center */
+.center-panel{
+  border-radius:9px;border:1.5px solid #fce4ec;
+  background:linear-gradient(145deg,#ffffffee,#fff5f8);
+  padding:7px 8px 8px;flex:1;width:100%;
+  display:flex;flex-direction:column;overflow:hidden;
+  transition:border-color 0.25s,box-shadow 0.25s;
+  min-height:0;
+}
+.center-panel.easy{border-color:#f06292;box-shadow:0 2px 10px #e91e6314;}
+.center-panel.medium{border-color:var(--pink);box-shadow:0 2px 10px #e91e6320;}
+.center-panel.hard{border-color:var(--pink-dark);box-shadow:0 3px 14px #c2185b33;}
+.ph{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;color:#d4a0b0;text-align:center;gap:3px;padding:4px;}
+.ph span{font-size:20px;}
+.ph p{font-size:10px;font-style:italic;line-height:1.4;color:#c4a0b8;}
+.pbadge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:99px;font-size:8px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;background:#fce4ec;color:var(--pink);border:1px solid #f48fb1;white-space:nowrap;}
+.pbox{font-family:'Playfair Display',serif;font-size:clamp(11px,2.8vw,15px);font-weight:700;color:#880e4f;margin-bottom:4px;line-height:1.2;}
+.tag{display:inline-block;padding:2px 9px;border-radius:99px;font-size:8px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px;border:1.5px solid transparent;}
+.tag-go{background:#e8f5e9;border-color:#66bb6a;color:#2e7d32;}
+.tag-back{background:#fce4ec;border-color:var(--pink);color:var(--pink-dark);}
+.tag-skip{background:#fff3e0;border-color:#ffa726;color:#e65100;}
+.tag-bonus{background:#f3e5f5;border-color:var(--purple-light);color:var(--purple);}
+.paction{font-size:clamp(10px,2.4vw,13px);color:#5d4037;line-height:1.55;font-style:italic;flex:1;overflow-y:auto;transition:opacity 0.12s;}
+.paction.flash{opacity:0;}
+
+/* ── BOTTOM PANEL (when box selected on mobile list view) ── */
+.bottom-sheet{
+  position:fixed;bottom:0;left:0;right:0;
+  background:#fff;border-radius:20px 20px 0 0;
+  box-shadow:0 -8px 32px #e91e6322;
+  transform:translateY(100%);transition:transform 0.32s cubic-bezier(.32,0.72,0,1);
+  z-index:50;padding:0 0 calc(16px + var(--safe-bottom));
+  max-height:55vh;display:flex;flex-direction:column;
+}
+.bottom-sheet.open{transform:translateY(0);}
+.bs-handle{width:36px;height:4px;background:#e0d0d8;border-radius:99px;margin:10px auto 12px;flex-shrink:0;}
+.bs-content{padding:0 16px 4px;flex:1;overflow-y:auto;}
+.bs-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:10px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;background:#fce4ec;color:var(--pink);border:1px solid #f48fb1;}
+.bs-name{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:#880e4f;margin-bottom:6px;}
+.bs-tag{display:inline-block;padding:3px 11px;border-radius:99px;font-size:10px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:10px;border:1.5px solid transparent;}
+.bs-action{font-size:15px;color:#5d4037;line-height:1.7;font-style:italic;margin-bottom:10px;transition:opacity 0.12s;}
+.bs-action.flash{opacity:0;}
+.bs-close{position:absolute;top:12px;right:16px;width:28px;height:28px;border-radius:50%;background:#fce4ec;border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:var(--pink);font-weight:900;}
+
+/* ── MODAL ── */
+.modal-bg{display:none;position:fixed;inset:0;background:#00000077;z-index:100;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px);}
+.modal-bg.open{display:flex;}
+.modal{
+  background:#fff;border-radius:24px 24px 0 0;
+  width:100%;max-height:85vh;
+  overflow:hidden;display:flex;flex-direction:column;
+  animation:slideUp 0.32s cubic-bezier(.32,0.72,0,1);
+  padding-bottom:var(--safe-bottom);
+}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.modal-handle{width:36px;height:4px;background:#e0d0d8;border-radius:99px;margin:10px auto 0;flex-shrink:0;}
+.modal-header{padding:14px 16px 12px;text-align:center;flex-shrink:0;}
+.modal-header.twist{background:linear-gradient(135deg,var(--purple),var(--purple-light),#ce93d8);}
+.modal-header.chest{background:linear-gradient(135deg,var(--pink-dark),var(--pink),var(--pink-light));}
+.modal-header h2{font-family:'Playfair Display',serif;font-size:20px;color:#fff;font-weight:900;}
+.modal-header p{font-size:11px;color:#fff9;margin-top:2px;letter-spacing:0.1em;text-transform:uppercase;}
+.modal-level-pill{display:inline-block;margin-top:7px;padding:3px 12px;border-radius:99px;background:#ffffff30;color:#fff;font-size:10px;font-weight:800;letter-spacing:0.07em;}
+.modal-card-area{padding:16px;flex:1;overflow-y:auto;}
+.drawn-card{border-radius:16px;padding:20px 16px;border:2px dashed;font-style:italic;font-size:17px;line-height:1.7;color:#5d4037;animation:cardFlip 0.38s ease-out;}
+.drawn-card.twist{background:#f9f0ff;border-color:var(--purple-light);}
+.drawn-card.chest{background:#fff0f5;border-color:var(--pink);}
+@keyframes cardFlip{from{transform:rotateY(80deg);opacity:0;}to{transform:rotateY(0);opacity:1;}}
+.card-icon{font-size:34px;display:block;margin-bottom:10px;}
+.modal-btns{display:flex;gap:10px;padding:0 16px 16px;flex-shrink:0;}
+.draw-again-btn{flex:1;padding:13px;border-radius:50px;border:none;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;letter-spacing:0.05em;cursor:pointer;transition:all 0.18s;}
+.draw-again-btn.twist{background:linear-gradient(135deg,var(--purple),var(--purple-light));color:#fff;}
+.draw-again-btn.chest{background:linear-gradient(135deg,var(--pink-dark),var(--pink));color:#fff;}
+.draw-again-btn:active{transform:scale(0.97);}
+.close-btn{padding:13px 20px;border-radius:50px;border:1.5px solid #fce4ec;background:#fff;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:#c48090;cursor:pointer;}
+.close-btn:active{background:#fce4ec;}
+
+/* hearts bg */
+.hearts-bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+.hbg{position:absolute;animation:hbgfloat linear infinite;opacity:0.08;}
+@keyframes hbgfloat{0%{transform:translateY(110vh) rotate(0deg);opacity:0;}10%{opacity:0.12;}90%{opacity:0.08;}100%{transform:translateY(-20px) rotate(360deg);opacity:0;}}
+</style>
+</head>
+<body>
+
+<div class="hearts-bg" id="heartsBg"></div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-hearts" id="headerHearts"></div>
+  <div class="logo"><span>LOVE</span>OPOLY</div>
+  <div class="logo-sub">❤ Couple Edition ❤</div>
+</div>
+
+<!-- LEVEL SELECTOR (top bar) -->
+<div class="level-section">
+  <div class="level-label">Difficulty</div>
+  <div class="level-row">
+    <button class="lvl-btn easy active" onclick="setLevel('easy')">
+      <span class="lv-icon">🌸</span>Soft Play<span class="check">✓</span>
+    </button>
+    <button class="lvl-btn medium" onclick="setLevel('medium')">
+      <span class="lv-icon">💋</span>Flirty<span class="check">✓</span>
+    </button>
+    <button class="lvl-btn hard" onclick="setLevel('hard')">
+      <span class="lv-icon">🔥</span>Spicy<span class="check">✓</span>
+    </button>
+  </div>
+</div>
+
+<!-- CARD DECKS (top bar) -->
+<div class="decks-section">
+  <button class="deck-btn twist" onclick="openCardModal('twist')">
+    <span class="deck-icon">🃏</span>Love Twist
+    <span class="deck-tag">DRAW A CARD</span>
+  </button>
+  <button class="deck-btn chest" onclick="openCardModal('chest')">
+    <span class="deck-icon">💝</span>Couple Chest
+    <span class="deck-tag">OPEN CHEST</span>
+  </button>
+</div>
+
+<!-- BOARD -->
+<div class="board-section">
+  <div class="board" id="board">
+    <div class="board-center" id="boardCenter">
+      <div class="center-title"><span class="love">LOVE</span>OPOLY</div>
+      <div class="center-sub">❤ Couple Edition ❤</div>
+      <div class="center-levels">
+        <button class="clvl easy active" onclick="setLevel('easy')">
+          <span class="ci">🌸</span>Soft<span class="ck">✓</span>
+        </button>
+        <button class="clvl medium" onclick="setLevel('medium')">
+          <span class="ci">💋</span>Flirty<span class="ck">✓</span>
+        </button>
+        <button class="clvl hard" onclick="setLevel('hard')">
+          <span class="ci">🔥</span>Spicy<span class="ck">✓</span>
+        </button>
+      </div>
+      <div class="center-decks">
+        <button class="cdeck twist" onclick="openCardModal('twist')">
+          <span class="cdi">🃏</span>Love Twist<span class="cdt">DRAW</span>
+        </button>
+        <button class="cdeck chest" onclick="openCardModal('chest')">
+          <span class="cdi">💝</span>Couple Chest<span class="cdt">OPEN</span>
+        </button>
+      </div>
+      <div class="center-panel" id="actionPanel">
+        <div class="ph"><span>💌</span><p>Tap a square on the board</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM SHEET (shows action on mobile tap) -->
+<div class="bottom-sheet" id="bottomSheet">
+  <div class="bs-handle"></div>
+  <button class="bs-close" onclick="closeBottomSheet()">✕</button>
+  <div class="bs-content" id="bsContent"></div>
+</div>
+
+<!-- CARD MODAL -->
+<div class="modal-bg" id="modalBg" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header" id="modalHeader">
+      <h2 id="modalTitle"></h2>
+      <p id="modalSub"></p>
+      <div class="modal-level-pill" id="modalLevelPill"></div>
+    </div>
+    <div class="modal-card-area">
+      <div class="drawn-card" id="drawnCard">
+        <span class="card-icon" id="cardIcon"></span>
+        <span id="cardText"></span>
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="draw-again-btn" id="drawAgainBtn" onclick="drawCard()">🔀 Draw Again</button>
+      <button class="close-btn" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const BOXES=[
+  {n:"Love Start",e:"💕"},{n:"Memory Moment",e:"📸"},{n:"Couple Chest",e:"💝"},
+  {n:"Keep It Secret",e:"🤫"},{n:"Soulmates",e:"💞"},{n:"Unlock Secret",e:"🔑"},
+  {n:"Getaway",e:"🧳"},{n:"Love Twist",e:"🃏"},{n:"Explore",e:"🌍"},
+  {n:"Sweet Play",e:"🍓"},{n:"Time Out",e:"⏰"},{n:"Romantic Mode",e:"🍦"},
+  {n:"Love Tax",e:"💸"},{n:"Your Rule",e:"👑"},{n:"Take a Sip",e:"🥂"},
+  {n:"Secret Talk",e:"🤐"},{n:"Wild Dare",e:"🔥"},{n:"Couple Chest",e:"💝"},
+  {n:"Foot Play",e:"🦶"},{n:"Soft Touch",e:"🪶"},{n:"Chill Zone",e:"❄️"},
+  {n:"Spice Up",e:"🌶️"},{n:"Love Twist",e:"🃏"},{n:"Drink Time",e:"⏳"},
+  {n:"Kiss Move",e:"💋"},{n:"Heat Up",e:"🔥"},{n:"Eye Contact",e:"👁️"},
+  {n:"Love Reward",e:"💎"},{n:"Celebrate",e:"🎉"},{n:"Dance Vibe",e:"👠"},
+  {n:"Naughty Corner",e:"😈"},{n:"Partner Move",e:"🤝"},{n:"Night Mode",e:"🌙"},
+  {n:"Couple Chest",e:"💝"},{n:"Surprise",e:"🎁"},{n:"Kiss Again",e:"💏"},
+  {n:"Love Twist",e:"🃏"},{n:"2 Min Challenge",e:"⏱️"},{n:"Love Tax",e:"💸"},
+  {n:"Love Note",e:"💌"},
+];
+
+const LOVE_TWIST={
+  easy:[
+    {icon:"🎴",text:"Swap seats and play your partner's next turn for them."},
+    {icon:"💌",text:"Write a love word on your partner's hand with your finger."},
+    {icon:"🎵",text:"Hum your favourite song together until someone guesses it."},
+    {icon:"🌹",text:"Give your partner three genuine compliments right now."},
+    {icon:"🪞",text:"Mirror everything your partner does for 30 seconds."},
+    {icon:"🎁",text:"Promise your partner one favour they can cash anytime."},
+    {icon:"👀",text:"Stare into each other's eyes and don't blink for 15 seconds."},
+    {icon:"💃",text:"Dance together for one full minute — no music needed."},
+    {icon:"🤫",text:"Whisper your favourite memory of your partner in their ear."},
+    {icon:"🍬",text:"Feed each other something sweet without using your hands."},
+  ],
+  medium:[
+    {icon:"🎴",text:"Switch roles — your partner gives the orders for the next 2 turns."},
+    {icon:"💋",text:"Kiss your partner in a spot they least expect."},
+    {icon:"📱",text:"Share the last photo on your camera roll and explain it."},
+    {icon:"🔥",text:"Tell your partner the most attractive thing they did this week."},
+    {icon:"🎭",text:"Act out how you fell in love — your partner has to guess the scene."},
+    {icon:"🎯",text:"Dare your partner to do one thing they've never done before."},
+    {icon:"🌙",text:"Describe your perfect night in together in vivid detail."},
+    {icon:"🤝",text:"Make a secret handshake — you have 60 seconds to create it."},
+    {icon:"🍷",text:"Take turns: one thing you love, one thing you want more of."},
+    {icon:"🎲",text:"Roll again — but this time your partner picks your action."},
+  ],
+  hard:[
+    {icon:"🔥",text:"Your partner blindfolds you and leads you to a surprise spot in the room."},
+    {icon:"💋",text:"Kiss for 20 full seconds — no breaking away."},
+    {icon:"😈",text:"Tell your wildest fantasy out loud — no skipping allowed."},
+    {icon:"🎴",text:"Your partner controls your next 3 turns completely."},
+    {icon:"🔑",text:"Unlock one secret you have never told anyone — share it now."},
+    {icon:"🌶️",text:"Remove one item of clothing and leave it off for 2 rounds."},
+    {icon:"👁️",text:"Gaze into each other's eyes for 60 seconds in complete silence."},
+    {icon:"🎭",text:"Recreate your steamiest moment together — right now."},
+    {icon:"🤫",text:"Whisper the boldest thing you want to do tonight."},
+    {icon:"💃",text:"Give your partner the slowest, most romantic dance of their life."},
+  ]
+};
+
+const COUPLE_CHEST={
+  easy:[
+    {icon:"💝",text:"Open the chest! Both players move forward 1 space."},
+    {icon:"🎀",text:"Surprise gift — give your partner something from your pocket or bag."},
+    {icon:"📸",text:"Take a couple selfie right now and set it as your wallpaper."},
+    {icon:"🌹",text:"The chest says: give your partner a 1-minute hand massage."},
+    {icon:"🍫",text:"Share a sweet treat — if none available, share a sweet kiss instead."},
+    {icon:"💌",text:"Both write one thing you love about each other and swap notes."},
+    {icon:"🕯️",text:"Dim the lights and sit close for the rest of this round."},
+    {icon:"🎶",text:"Play your couple song — if you don't have one, pick one now!"},
+    {icon:"🤗",text:"Free hug! Hold each other for a full 10 seconds."},
+    {icon:"⭐",text:"Jackpot! Both players skip their next penalty."},
+  ],
+  medium:[
+    {icon:"💎",text:"Chest jackpot! Both players move forward 2 spaces."},
+    {icon:"🎯",text:"Dare chest: pick the spiciest dare on the board and do it."},
+    {icon:"🔐",text:"Locked chest — confess a secret to unlock it and earn a free turn."},
+    {icon:"🌙",text:"Night chest: lights off for 2 minutes — do whatever feels right."},
+    {icon:"🍾",text:"Celebration chest! Take a drink and move forward 2."},
+    {icon:"💋",text:"Chest says: 10-second kiss, then both pick a dare card."},
+    {icon:"🎁",text:"Mystery gift — your partner owes you one favour, no questions asked."},
+    {icon:"🕺",text:"Dance chest: slow dance for 2 full minutes right now."},
+    {icon:"📖",text:"Story chest: take turns adding sentences to a romantic story."},
+    {icon:"🃏",text:"Wild chest! Draw a Love Twist card on top of this action."},
+  ],
+  hard:[
+    {icon:"🔥",text:"Inferno chest! Both players remove one item of clothing."},
+    {icon:"😈",text:"Naughty chest: your partner dares you — no refusals allowed."},
+    {icon:"💋",text:"Chest command: make out for 30 full seconds."},
+    {icon:"🔑",text:"Secret chest: both reveal one thing you've always wanted to try."},
+    {icon:"🌶️",text:"Spice chest: both do the boldest dare on the board."},
+    {icon:"🎭",text:"Role play chest: pick a scene and act it out for 3 minutes."},
+    {icon:"👁️",text:"Intensity chest: maintain eye contact for 90 seconds. No laughing."},
+    {icon:"🎯",text:"Bull's-eye chest: your partner names it, you do it — no limits."},
+    {icon:"🌙",text:"Midnight chest: plan something intimate for tonight, share details now."},
+    {icon:"💝",text:"Grand jackpot! Skip any 2 penalties AND draw a Love Twist card."},
+  ]
+};
+
+const ACTIONS={
+  easy:[
+    {n:"Love Start",a:"Begin your love journey! Roll again.",t:"bonus"},
+    {n:"Memory Moment",a:"Share a happy memory together.",t:"bonus"},
+    {n:"Couple Chest",a:"CC",t:"card",ct:"chest"},
+    {n:"Keep It Secret",a:"Whisper something sweet in their ear.",t:"bonus"},
+    {n:"Soulmates",a:"Hold hands for the next round.",t:"bonus"},
+    {n:"Unlock Secret",a:"Tell your partner one thing you love about them.",t:"bonus"},
+    {n:"Getaway",a:"Plan a mini date for this week.",t:"bonus"},
+    {n:"Love Twist",a:"LT",t:"card",ct:"twist"},
+    {n:"Explore",a:"Name 3 places you want to visit together.",t:"bonus"},
+    {n:"Sweet Play",a:"Feed your partner a snack.",t:"bonus"},
+    {n:"Time Out",a:"Take a 1-minute break and cuddle.",t:"skip"},
+    {n:"Romantic Mode",a:"Light a candle and set the mood.",t:"bonus"},
+    {n:"Love Tax",a:"Love tax — give a forehead kiss. Go back 1.",t:"back"},
+    {n:"Your Rule",a:"Make a rule: no phones for 5 minutes.",t:"go"},
+    {n:"Take a Sip",a:"Take a sip together at the same time.",t:"bonus"},
+    {n:"Secret Talk",a:"Share a secret you've never told.",t:"bonus"},
+    {n:"Wild Dare",a:"Silly dance together for 10 seconds!",t:"go"},
+    {n:"Couple Chest",a:"CC",t:"card",ct:"chest"},
+    {n:"Foot Play",a:"Give a 10-second foot massage.",t:"bonus"},
+    {n:"Soft Touch",a:"Trace a heart on your partner's hand.",t:"bonus"},
+    {n:"Chill Zone",a:"Sit quietly together for 30 seconds.",t:"skip"},
+    {n:"Spice Up",a:"Say one thing that makes your partner special.",t:"bonus"},
+    {n:"Love Twist",a:"LT",t:"card",ct:"twist"},
+    {n:"Drink Time",a:"Share a drink together.",t:"bonus"},
+    {n:"Kiss Move",a:"Give a sweet kiss on the cheek.",t:"bonus"},
+    {n:"Heat Up",a:"Hold each other's gaze for 10 seconds.",t:"go"},
+    {n:"Eye Contact",a:"Exchange a small love reward.",t:"bonus"},
+    {n:"Love Reward",a:"Do a happy dance together.",t:"go"},
+    {n:"Celebrate",a:"Sway together to a slow song.",t:"bonus"},
+    {n:"Dance Vibe",a:"Go back 1 — the naughty corner awaits!",t:"back"},
+    {n:"Naughty Corner",a:"Your partner moves forward 2 for you.",t:"go"},
+    {n:"Partner Move",a:"Night mode on — dim the lights.",t:"bonus"},
+    {n:"Night Mode",a:"Surprise your partner with a random act of love.",t:"bonus"},
+    {n:"Couple Chest",a:"CC",t:"card",ct:"chest"},
+    {n:"Surprise",a:"Kiss again — because why not?",t:"bonus"},
+    {n:"Kiss Again",a:"2-minute challenge: stare into each other's eyes.",t:"go"},
+    {n:"Love Twist",a:"LT",t:"card",ct:"twist"},
+    {n:"2 Min Challenge",a:"Love tax — a warm hug. Go back 1.",t:"back"},
+    {n:"Love Tax",a:"Write a tiny love note right now.",t:"bonus"},
+    {n:"Love Note",a:"You win this round with love! 💕",t:"go"},
+  ],
+  medium:[
+    {n:"Love Start",a:"Roll again and double your move!",t:"go"},
+    {n:"Memory Moment",a:"Re-enact your first date together.",t:"bonus"},
+    {n:"Couple Chest",a:"CC",t:"card",ct:"chest"},
+    {n:"Keep It Secret",a:"Whisper a fantasy to your partner.",t:"bonus"},
+    {n:"Soulmates",a:"Describe what makes you soulmates in 1 minute.",t:"bonus"},
+    {n:"Unlock Secret",a:"Confess something you've never said. Move forward 2.",t:"go"},
+    {n:"Getaway",a:"Plan a surprise getaway for next month.",t:"bonus"},
+    {n:"Love Twist",a:"LT",t:"card",ct:"twist"},
+    {n:"Explore",a:"Give a 30-second shoulder massage.",t:"bonus"},
+    {n:"Sweet Play",a:"Feed each other something delicious.",t:"bonus"},
+    {n:"Time Out",a:"2-min make-out break. Skip this turn.",t:"skip"},
+    {n:"Romantic Mode",a:"Slow dance for one full song.",t:"bonus"},
+    {n:"Love Tax",a:"Love tax: go back 2 — pay with 2 kisses.",t:"back"},
+    {n:"Your Rule",a:"Make your rule for the rest of the game.",t:"go"},
+    {n:"Take a Sip",a:"Take a sip for every secret you've kept.",t:"bonus"},
+    {n:"Secret Talk",a:"Share your deepest fear.",t:"bonus"},
+    {n:"Wild Dare",a:"Do whatever your partner says for 1 minute.",t:"go"},
+    {n:"Couple Chest",a:"CC",t:"card",ct:"chest"},
+    {n:"Foot Play",a:"Give a 1-minute foot massage.",t:"bonus"},
+    {n:"Soft Touch",a:"Trace your partner's face with your fingertips.",t:"bonus"},
+    {n:"Chill Zone",a:"Skip a turn but get a back rub.",t:"skip"},
+    {n:"Spice Up",a:"Compliment your partner's best feature.",t:"bonus"},
+    {n:"Love Twist",a:"LT",t:"card",ct:"twist"},
+    {n:"Drink Time",a:"Take a shot for a dare.",t:"bonus"},
+    {n:"Kiss Move",a:"Kiss for 10 full seconds.",t:"bonus"},
+    {n:"Heat Up",a:"Increase the flirt level this round.",t:"go"},
+    {n:"Eye Contact",a:"Eye contact challenge: 30 seconds, no blinking.",t:"go"},
+    {n:"Love Reward",a:"Your partner gives you a prize.",t:"bonus"},
+    {n:"Celebrate",a:"Both move forward 1 space.",t:"go"},
+    {n:"Dance Vibe",a:"Naughty corner: go back 2.",t:"back"},
+    {n:"Naughty Corner",a:"Your partner decides your next action.",t:"go"},
+    {n:"Partner Move",a:"Lights off, share something intimate.",t:"bonus"},
+    {n:"Night Mode",a:"Do something unexpected for your partner now.",t:"bonus"},
+    {n:"Couple Chest",a:"CC",t:"card",ct:"chest"},
+    {n:"Surprise",a:"3 kisses in a row.",t:"bonus"},
+    {n:"Kiss Again",a:"2-min challenge: make each other laugh.",t:"go"},
+    {n:"Love Twist",a:"LT",t:"card",ct:"twist"},
+    {n:"2 Min Challenge",a:"Love tax: go back 1 — pay with a long hug.",t:"back"},
+    {n:"Love Tax",a:"Write a love note and read it out loud.",t:"bonus"},
+    {n:"Love Note",a:"Most romantic player wins! 💋",t:"go"},
+  ],
+  hard:[
+    {n:"Love Start",a:"Passionate kiss for 10 seconds. 🔥",t:"bonus"},
+    {n:"Memory Moment",a:"Recreate your most romantic moment tonight.",t:"bonus"},
+    {n:"Couple Chest",a:"CC",t:"card",ct:"chest"},
+    {n:"Keep It Secret",a:"Reveal your wildest fantasy — no skipping.",t:"bonus"},
+    {n:"Soulmates",a:"Prove you're soulmates: finish each other's sentences.",t:"go"},
+    {n:"Unlock Secret",a:"Confess the thing you were afraid to say. Move forward 2.",t:"go"},
+    {n:"Getaway",a:"Plan a real getaway — set a date right now.",t:"go"},
+    {n:"Love Twist",a:"LT",t:"card",ct:"twist"},
+    {n:"Explore",a:"Full 1-min body massage.",t:"bonus"},
+    {n:"Sweet Play",a:"Feed each other blindfolded.",t:"bonus"},
+    {n:"Time Out",a:"3-min make-out session. Skip this turn. ⏰",t:"skip"},
+    {n:"Romantic Mode",a:"Write a love poem on the spot.",t:"bonus"},
+    {n:"Love Tax",a:"Love tax: go back 3 — pay with a passionate kiss.",t:"back"},
+    {n:"Your Rule",a:"Make a daring rule for the rest of the game.",t:"go"},
+    {n:"Take a Sip",a:"Sip every time your partner says your name tonight.",t:"bonus"},
+    {n:"Secret Talk",a:"Share your biggest relationship fear.",t:"bonus"},
+    {n:"Wild Dare",a:"Your partner controls your next 2 turns.",t:"go"},
+    {n:"Couple Chest",a:"CC",t:"card",ct:"chest"},
+    {n:"Foot Play",a:"Full 2-minute foot massage.",t:"bonus"},
+    {n:"Soft Touch",a:"Blindfold your partner, trace their face.",t:"bonus"},
+    {n:"Chill Zone",a:"Skip 2 turns but get a full back massage.",t:"skip"},
+    {n:"Spice Up",a:"Do the most daring thing on the board.",t:"bonus"},
+    {n:"Love Twist",a:"LT",t:"card",ct:"twist"},
+    {n:"Drink Time",a:"Both drink and confess a spicy secret.",t:"bonus"},
+    {n:"Kiss Move",a:"Kiss every spot your partner points to.",t:"bonus"},
+    {n:"Heat Up",a:"Take off one item of clothing. 🔥",t:"go"},
+    {n:"Eye Contact",a:"60 seconds — say nothing, feel everything.",t:"go"},
+    {n:"Love Reward",a:"Claim your prize — your partner's choice.",t:"bonus"},
+    {n:"Celebrate",a:"Both move forward 2 and kiss.",t:"go"},
+    {n:"Dance Vibe",a:"Naughty corner: go back 3. A spicy dare awaits.",t:"back"},
+    {n:"Naughty Corner",a:"Your partner blindfolds you for 1 minute.",t:"go"},
+    {n:"Partner Move",a:"No lights — share your deepest secret.",t:"bonus"},
+    {n:"Night Mode",a:"Do the boldest thing you've never done.",t:"bonus"},
+    {n:"Couple Chest",a:"CC",t:"card",ct:"chest"},
+    {n:"Surprise",a:"This kiss lasts 20 seconds. Go. 💋",t:"bonus"},
+    {n:"Kiss Again",a:"Give the best kiss of the night — 2 minutes.",t:"go"},
+    {n:"Love Twist",a:"LT",t:"card",ct:"twist"},
+    {n:"2 Min Challenge",a:"Love tax: go back 2 — pay with a full-body hug.",t:"back"},
+    {n:"Love Tax",a:"Write the steamiest thing you love about them.",t:"bonus"},
+    {n:"Love Note",a:"Tonight belongs to you two. You win! 🔥💕",t:"go"},
+  ]
+};
+
+const TILE_BGS=['#012768','#684797','#ED6C7D','#0290C0','#EA6B7B','#E22727','#226C9D','#FCE8D2','#013D7D','#6F4B97','#BE0E25','#015B9C','#FDE363','#3F9154','#E47190','#DA1920','#0551A7','#E86D7E','#F76910','#0b8dc9','#013371','#d2020c','#fbe9d3','#fc6801','#6a34a7','#e11a23','#1c98c4','#fdcf2a','#3d9758','#e86d7e','#cc182f','#0794b7','#398853','#ec677b','#207db6','#e1252b','#fbebd5','#1c78b6','#fde569','#489a5f'];
+
+let level='easy', selectedId=null, currentCardType=null;
+let deckcounter=0, randomIndexes=[];
+const LEVEL_LABEL={easy:'🌸 Soft Play',medium:'💋 Flirty',hard:'🔥 Spicy'};
+function tagLabel(t){return{go:'Move Forward',back:'Go Back',skip:'Skip Turn',bonus:'Challenge',card:'Draw a Card'}[t]||'Action';}
+function tagClass(t){return{go:'tag-go',back:'tag-back',skip:'tag-skip',bonus:'tag-bonus',card:'tag-bonus'}[t]||'tag-bonus';}
+
+// floating hearts bg
+const hbg=document.getElementById('heartsBg');
+['❤️','💕','💗','💖','💝','🌹','💋'].forEach((e,i)=>{
+  const d=document.createElement('div');d.className='hbg';d.textContent=e;
+  const dur=8+Math.random()*10;
+  d.style.cssText=`left:${Math.random()*95}%;bottom:-30px;font-size:${14+Math.random()*16}px;animation-duration:${dur}s;animation-delay:${-Math.random()*dur}s;`;
+  hbg.appendChild(d);
+});
+// header hearts
+const hh=document.getElementById('headerHearts');
+['❤️','💕','💋'].forEach((e,i)=>{
+  const d=document.createElement('div');d.className='hh';d.textContent=e;
+  d.style.cssText=`left:${20+i*30}%;top:${10+i*15}%;font-size:${14+i*4}px;opacity:0.25;animation-delay:${i*0.8}s;`;
+  hh.appendChild(d);
+});
+
+function buildBoardPath(){
+  const p=[];
+  for(let c=11;c>=1;c--) p.push({r:11,c});
+  for(let r=10;r>=1;r--) p.push({r,c:1});
+  for(let c=2;c<=11;c++) p.push({r:1,c});
+  for(let r=2;r<=10;r++) p.push({r,c:11});
+  return p;
+}
+const BOARD_PATH=buildBoardPath();
+
+function tileRotation(r,c){
+  if(r===1) return '180deg';if(r===11) return '0deg';
+  if(c===1) return '90deg';if(c===11) return '-90deg';return '0deg';
+}
+
+function renderBoard(){
+  const board=document.getElementById('board');
+  board.querySelectorAll('.tile').forEach(el=>el.remove());
+  const frag=document.createDocumentFragment();
+  BOARD_PATH.forEach((pos,i)=>{
+    const {r,c}=pos;
+    const rot=tileRotation(r,c);
+    const isCorner=i===0||i===10||i===20||i===30;
+    const bg=TILE_BGS[i]||'#e91e63';
+    if(i<BOXES.length){
+      const b=BOXES[i];const id=i+1;
+      const btn=document.createElement('button');
+      btn.type='button';
+      btn.className='tile'+(isCorner?' corner':'')+(selectedId===id?' active '+level:'');
+      btn.style.gridRow=String(r);btn.style.gridColumn=String(c);
+      btn.style.background=`linear-gradient(160deg,${bg} 0%,rgba(0,0,0,0.28) 100%)`;
+      btn.addEventListener('click',()=>selectBox(id));
+      const inner=document.createElement('div');
+      inner.className='tile-inner';inner.style.setProperty('--rot',rot);
+      inner.innerHTML=`<div class="tnum">#${String(id).padStart(2,'0')}</div><div class="ticon">${b.e}</div>`;
+      btn.appendChild(inner);frag.appendChild(btn);
+    } else {
+      const div=document.createElement('div');
+      div.className='tile filler'+(isCorner?' corner':'');
+      div.style.gridRow=String(r);div.style.gridColumn=String(c);
+      div.style.background='linear-gradient(160deg,#ba68c8,#6a1b9a)';
+      const inner=document.createElement('div');inner.className='tile-inner';inner.style.setProperty('--rot',rot);
+      inner.innerHTML='<div class="ticon">✨</div>';div.appendChild(inner);frag.appendChild(div);
+    }
+  });
+  board.insertBefore(frag,board.firstChild);
+}
+
+function setLevel(l){
+  level=l;
+  document.querySelectorAll('.lvl-btn,.clvl').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.lvl-btn.'+l+',.clvl.'+l).forEach(b=>b.classList.add('active'));
+  renderBoard();
+  if(selectedId) renderActionPanel();
+}
+
+function selectBox(id){
+  selectedId=id;
+  renderBoard();
+  renderActionPanel();
+  openBottomSheet();
+}
+
+function renderActionPanel(){
+  const panel=document.getElementById('actionPanel');
+  if(!selectedId){panel.className='center-panel';panel.innerHTML='<div class="ph"><span>💌</span><p>Tap a square on the board</p></div>';return;}
+  const entry=ACTIONS[level][selectedId-1];
+  const box=BOXES[selectedId-1];
+  panel.className='center-panel '+level;
+  if(entry.t==='card'){
+    const isChest=entry.ct==='chest';
+    panel.innerHTML=`<div class="pbadge">❤ ${LEVEL_LABEL[level]}</div>
+      <div class="pbox">${box.e} ${box.n}</div>
+      <div><span class="tag tag-bonus">Draw a Card</span></div>
+      <div class="paction" style="display:flex;align-items:center;justify-content:center;flex:1;">
+        <button onclick="openCardModal('${entry.ct}')" style="padding:8px 14px;border-radius:50px;border:none;background:linear-gradient(135deg,${isChest?'#c2185b,#e91e63':'#7b1fa2,#ab47bc'});color:#fff;font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:0.04em;">
+          ${isChest?'💝 Open Chest':'🃏 Draw Card'}
+        </button>
+      </div>`;
+  } else {
+    panel.innerHTML=`<div class="pbadge">❤ ${LEVEL_LABEL[level]}</div>
+      <div class="pbox">${box.e} ${box.n}</div>
+      <div><span class="tag ${tagClass(entry.t)}">${tagLabel(entry.t)}</span></div>
+      <div class="paction">${entry.a}</div>`;
+  }
+  // also update bottom sheet
+  renderBottomSheet(box,entry);
+}
+
+function renderBottomSheet(box,entry){
+  const content=document.getElementById('bsContent');
+  const lvlLabel=LEVEL_LABEL[level];
+  if(entry.t==='card'){
+    const isChest=entry.ct==='chest';
+    content.innerHTML=`<div class="bs-badge">❤ ${lvlLabel} · Box #${selectedId}</div>
+      <div class="bs-name">${box.e} ${box.n}</div>
+      <div><span class="bs-tag tag-bonus">Draw a Card</span></div>
+      <div class="bs-action">${isChest?'You landed on the Couple Chest!':'You landed on Love Twist!'}</div>
+      <button onclick="openCardModal('${entry.ct}');closeBottomSheet();" style="width:100%;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,${isChest?'#c2185b,#e91e63':'#7b1fa2,#ab47bc'});color:#fff;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;letter-spacing:0.04em;margin-top:4px;">
+        ${isChest?'💝 Open the Couple Chest':'🃏 Draw a Love Twist Card'}
+      </button>`;
+  } else {
+    content.innerHTML=`<div class="bs-badge">❤ ${lvlLabel} · Box #${selectedId}</div>
+      <div class="bs-name">${box.e} ${box.n}</div>
+      <div><span class="bs-tag ${tagClass(entry.t)}">${tagLabel(entry.t)}</span></div>
+      <div class="bs-action">${entry.a}</div>`;
+  }
+}
+
+function openBottomSheet(){document.getElementById('bottomSheet').classList.add('open');}
+function closeBottomSheet(){document.getElementById('bottomSheet').classList.remove('open');}
+
+// swipe down to close bottom sheet
+let bsStartY=0;
+const bs=document.getElementById('bottomSheet');
+bs.addEventListener('touchstart',e=>{bsStartY=e.touches[0].clientY;},{passive:true});
+bs.addEventListener('touchend',e=>{if(e.changedTouches[0].clientY-bsStartY>60) closeBottomSheet();},{passive:true});
+
+// card modal
+function resetDeck(type){
+  const deck=type==='twist'?LOVE_TWIST[level]:COUPLE_CHEST[level];
+  randomIndexes=Array.from({length:deck.length},(_,i)=>i).sort(()=>Math.random()-0.5);
+  deckcounter=0;
+}
+
+function openCardModal(type){
+  currentCardType=type;resetDeck(type);
+  const isChest=type==='chest';
+  const header=document.getElementById('modalHeader');
+  header.className='modal-header '+(isChest?'chest':'twist');
+  document.getElementById('modalTitle').textContent=isChest?'💝 Couple Chest':'🃏 Love Twist';
+  document.getElementById('modalSub').textContent=isChest?'Open the chest to claim your reward':'A surprise twist for the couple';
+  document.getElementById('modalLevelPill').textContent=LEVEL_LABEL[level];
+  document.getElementById('drawAgainBtn').className='draw-again-btn '+(isChest?'chest':'twist');
+  document.getElementById('drawnCard').className='drawn-card '+(isChest?'chest':'twist');
+  drawCard();
+  document.getElementById('modalBg').classList.add('open');
+}
+
+function drawCard(){
+  const deck=currentCardType==='twist'?LOVE_TWIST[level]:COUPLE_CHEST[level];
+  if(deckcounter>=deck.length){randomIndexes=Array.from({length:deck.length},(_,i)=>i).sort(()=>Math.random()-0.5);deckcounter=0;}
+  const card=deck[randomIndexes[deckcounter++]];
+  const cardEl=document.getElementById('drawnCard');
+  cardEl.style.animation='none';cardEl.offsetHeight;cardEl.style.animation='cardFlip 0.38s ease-out';
+  document.getElementById('cardIcon').textContent=card.icon;
+  document.getElementById('cardText').textContent=card.text;
+  document.getElementById('modalLevelPill').textContent=LEVEL_LABEL[level];
+}
+
+function closeModal(e){
+  if(!e||e.target===document.getElementById('modalBg'))
+    document.getElementById('modalBg').classList.remove('open');
+}
+
+renderBoard();
+</script>
+</body>
+</html>
