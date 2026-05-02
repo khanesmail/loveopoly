@@ -298,7 +298,6 @@ body{
       </div>
     </div>
     <div class="modal-btns">
-      <button class="draw-again-btn" id="drawAgainBtn" onclick="drawCard()">🔀 Draw Again</button>
       <button class="close-btn" onclick="closeModal()">Close</button>
     </div>
   </div>
@@ -690,7 +689,7 @@ function openCardModal(type){
   document.getElementById('modalTitle').textContent=isChest?'💝 Couple Chest':'🃏 Love Twist';
   document.getElementById('modalSub').textContent=isChest?'Open the chest to claim your reward':'A surprise twist for the couple';
   document.getElementById('modalLevelPill').textContent=LEVEL_LABEL[level];
-  document.getElementById('drawAgainBtn').className='draw-again-btn '+(isChest?'chest':'twist');
+ // document.getElementById('drawAgainBtn').className='draw-again-btn '+(isChest?'chest':'twist');
   document.getElementById('drawnCard').className='drawn-card '+(isChest?'chest':'twist');
   drawCard();
   document.getElementById('modalBg').classList.add('open');
