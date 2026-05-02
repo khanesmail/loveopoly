@@ -194,9 +194,12 @@ body{
   margin: 0 auto;
   overflow:hidden;display:flex;flex-direction:column;
   animation:popIn 0.32s cubic-bezier(.32,0.72,0,1);
+  position: relative;
 }
 @keyframes popIn{from{transform:scale(0.95);opacity:0;}to{transform:scale(1);opacity:1;}}
 .modal-handle{display:none;}
+.modal-close{position:absolute;top:12px;right:16px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.25);border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;transition:background 0.2s;}
+.modal-close:active{background:rgba(255,255,255,0.4);}
 .modal-header{padding:14px 16px 12px;text-align:center;flex-shrink:0;}
 .modal-header.twist{background:linear-gradient(135deg,var(--purple),var(--purple-light),#ce93d8);}
 .modal-header.chest{background:linear-gradient(135deg,var(--pink-dark),var(--pink),var(--pink-light));}
@@ -285,6 +288,7 @@ body{
 <!-- CARD MODAL -->
 <div class="modal-bg" id="modalBg" onclick="closeModal(event)">
   <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
     <div class="modal-handle"></div>
     <div class="modal-header" id="modalHeader">
       <h2 id="modalTitle"></h2>
@@ -296,9 +300,6 @@ body{
         <span class="card-icon" id="cardIcon"></span>
         <span id="cardText"></span>
       </div>
-    </div>
-    <div class="modal-btns">
-      <button class="close-btn" onclick="closeModal()">Close</button>
     </div>
   </div>
 </div>
