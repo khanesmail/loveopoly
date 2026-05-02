@@ -555,6 +555,7 @@ function renderBoard(){
   // Detect if Desktop layout is active to set columns dynamically
   const isDesktop = window.matchMedia("(min-width: 768px), (orientation: landscape) and (max-height: 600px)").matches;
   const cols = isDesktop ? 8 : 5;
+  const rows = 40 / cols; // Calculate total rows (8 for mobile, 5 for desktop)
   currentCols = cols;
 
   BOXES.forEach((b, i) => {
@@ -563,9 +564,12 @@ function renderBoard(){
     btn.type='button';
     btn.className='tile '+(selectedId===id?' active '+level:'');
     
-    // Dynamic snaking logic based on column count
-    const r = Math.floor(i / cols) + 1; 
-    const c = (r % 2 !== 0) ? (i % cols) + 1 : cols - (i % cols); 
+    // Snake and Ladder logic starting at Bottom Right
+    const rowFromBottom = Math.floor(i / cols); // 0 corresponds to the very bottom row
+    const r = rows - rowFromBottom; // Calculates CSS grid row starting from the bottom
+    
+    // Alternates between Right-to-Left and Left-to-Right
+    const c = (rowFromBottom % 2 === 0) ? cols - (i % cols) : (i % cols) + 1; 
     
     btn.style.gridRow = String(r);
     btn.style.gridColumn = String(c);
