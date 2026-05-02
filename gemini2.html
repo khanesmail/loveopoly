@@ -148,20 +148,32 @@ body{
 .paction{font-size:clamp(11px,2.5vw,20px);color:#5d4037;line-height:1.55;font-style:italic;flex:1;overflow-y:auto;transition:opacity 0.12s;}
 .paction.flash{opacity:0;}
 
-/* ── BOTTOM SHEET ── */
-.bottom-sheet{
-  position:fixed;bottom:0;left:0;right:0;
-  margin: 0 auto;
-  max-width: 500px;
-  background:#fff;border-radius:20px 20px 0 0;
-  box-shadow:0 -8px 32px #e91e6322;
-  transform:translateY(100%);transition:transform 0.32s cubic-bezier(.32,0.72,0,1);
-  z-index:50;padding:0 0 calc(16px + var(--safe-bottom));
-  max-height:55vh;display:flex;flex-direction:column;
+/* ── BOTTOM SHEET (NOW CENTERED) ── */
+.bs-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 90;
+  opacity: 0; visibility: hidden; transition: all 0.32s cubic-bezier(.32,0.72,0,1);
 }
-.bottom-sheet.open{transform:translateY(0);}
-.bs-handle{width:36px;height:4px;background:#e0d0d8;border-radius:99px;margin:10px auto 12px;flex-shrink:0;}
-.bs-content{padding:0 16px 4px;flex:1;overflow-y:auto;}
+.bs-backdrop.open {
+  opacity: 1; visibility: visible;
+}
+.bottom-sheet{
+  position:fixed;top:50%;left:50%;
+  width:calc(100% - 32px);
+  max-width: 400px;
+  background:#fff;border-radius:24px;
+  box-shadow:0 12px 48px rgba(233, 30, 99, 0.2);
+  transform:translate(-50%, -40%) scale(0.95);
+  opacity:0;visibility:hidden;
+  transition:all 0.32s cubic-bezier(.32,0.72,0,1);
+  z-index:100;padding:0 0 16px;
+  max-height:85vh;display:flex;flex-direction:column;
+}
+.bottom-sheet.open{
+  transform:translate(-50%, -50%) scale(1);
+  opacity:1;visibility:visible;
+}
+.bs-handle{display:none;}
+.bs-content{padding:24px 20px 4px;flex:1;overflow-y:auto;}
 .bs-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:10px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;background:#fce4ec;color:var(--pink);border:1px solid #f48fb1;}
 .bs-name{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:#880e4f;margin-bottom:6px;}
 .bs-tag{display:inline-block;padding:3px 11px;border-radius:99px;font-size:10px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:10px;border:1.5px solid transparent;}
@@ -169,19 +181,22 @@ body{
 .bs-action.flash{opacity:0;}
 .bs-close{position:absolute;top:12px;right:16px;width:28px;height:28px;border-radius:50%;background:#fce4ec;border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:var(--pink);font-weight:900;}
 
-/* ── MODAL ── */
-.modal-bg{display:none;position:fixed;inset:0;background:#00000077;z-index:100;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px);padding: 0;}
+/* ── MODAL (NOW CENTERED) ── */
+.modal-bg{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);
+  z-index:100;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);padding: 16px;
+}
 .modal-bg.open{display:flex;}
 .modal{
-  background:#fff;border-radius:24px 24px 0 0;
-  width:100%;max-width: 500px;max-height:85vh;
+  background:#fff;border-radius:24px;
+  width:100%;max-width: 400px;max-height:85vh;
   margin: 0 auto;
   overflow:hidden;display:flex;flex-direction:column;
-  animation:slideUp 0.32s cubic-bezier(.32,0.72,0,1);
-  padding-bottom:var(--safe-bottom);
+  animation:popIn 0.32s cubic-bezier(.32,0.72,0,1);
 }
-@keyframes slideUp{from{transform:translateY(100vh);}to{transform:translateY(0);}}
-.modal-handle{width:36px;height:4px;background:#e0d0d8;border-radius:99px;margin:10px auto 0;flex-shrink:0;}
+@keyframes popIn{from{transform:scale(0.95);opacity:0;}to{transform:scale(1);opacity:1;}}
+.modal-handle{display:none;}
 .modal-header{padding:14px 16px 12px;text-align:center;flex-shrink:0;}
 .modal-header.twist{background:linear-gradient(135deg,var(--purple),var(--purple-light),#ce93d8);}
 .modal-header.chest{background:linear-gradient(135deg,var(--pink-dark),var(--pink),var(--pink-light));}
@@ -226,14 +241,6 @@ body{
   .board {
     max-width: min(100vw - 48px, 100vh - 48px);
   }
-  .modal-bg {
-    align-items: center;
-    padding: 24px;
-  }
-  .modal {
-    border-radius: 24px;
-    margin: auto;
-  }
 }
 </style>
 </head>
@@ -259,14 +266,6 @@ body{
             <span class="ci">🔥</span>Spicy<span class="ck">✓</span>
           </button>
         </div>
-        <div class="center-decks">
-          <button class="cdeck twist" onclick="openCardModal('twist')">
-            <span class="cdi">🃏</span>Love Twist<span class="cdt">DRAW</span>
-          </button>
-          <button class="cdeck chest" onclick="openCardModal('chest')">
-            <span class="cdi">💝</span>Couple Chest<span class="cdt">OPEN</span>
-          </button>
-        </div>
         <div class="center-panel" id="actionPanel">
           <div class="ph"><span>💌</span><p>Tap a square on the board</p></div>
         </div>
@@ -276,6 +275,7 @@ body{
 </div>
 
 <!-- BOTTOM SHEET -->
+<div class="bs-backdrop" id="bsBackdrop" onclick="closeBottomSheet()"></div>
 <div class="bottom-sheet" id="bottomSheet">
   <div class="bs-handle"></div>
   <button class="bs-close" onclick="closeBottomSheet()">✕</button>
@@ -596,16 +596,18 @@ function renderBoard(){
 }
 
 function setLevel(l){
+  selectedId=null;
   level=l;
   document.querySelectorAll('.lvl-btn,.clvl').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.lvl-btn.'+l+',.clvl.'+l).forEach(b=>b.classList.add('active'));
-  renderBoard();
-  if(selectedId) renderActionPanel();
+  //renderBoard();
+  renderActionPanel();
+  //openBottomSheet();
 }
 
 function selectBox(id){
   selectedId=id;
-  renderBoard();
+  //renderBoard();
   renderActionPanel();
   openBottomSheet();
 }
@@ -656,8 +658,14 @@ function renderBottomSheet(box,entry){
   }
 }
 
-function openBottomSheet(){document.getElementById('bottomSheet').classList.add('open');}
-function closeBottomSheet(){document.getElementById('bottomSheet').classList.remove('open');}
+function openBottomSheet(){
+  document.getElementById('bottomSheet').classList.add('open');
+  document.getElementById('bsBackdrop').classList.add('open');
+}
+function closeBottomSheet(){
+  document.getElementById('bottomSheet').classList.remove('open');
+  document.getElementById('bsBackdrop').classList.remove('open');
+}
 
 // swipe down to close bottom sheet
 let bsStartY=0;
