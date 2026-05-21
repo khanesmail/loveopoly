@@ -540,7 +540,10 @@ function tagClass(t){return{go:'tag-go',back:'tag-back',skip:'tag-skip',bonus:'t
 
 // floating hearts bg
 const hbg=document.getElementById('heartsBg');
-['❤️','💕','💗','💖','💝','🌹','💋'].forEach((e,i)=>{
+[
+  '❤️','💕','💗','💖','💝','🌹','💋',
+  '💘','💞','❣️','🌸','🌺','😘','🥰'
+].forEach((e,i)=>{
   const d=document.createElement('div');d.className='hbg';d.textContent=e;
   const dur=8+Math.random()*10;
   d.style.cssText=`left:${Math.random()*95}%;bottom:-30px;font-size:${14+Math.random()*16}px;animation-duration:${dur}s;animation-delay:${-Math.random()*dur}s;`;
