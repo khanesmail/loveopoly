@@ -523,9 +523,18 @@ const TILE_BGS=['#012768','#684797','#ED6C7D','#0290C0','#EA6B7B','#E22727','#22
 
 let level='easy', selectedId=null, currentCardType=null;
 let deckcounter=0, randomIndexes=[];
+const deck=currentCardType==='twist'?LOVE_TWIST[level]:COUPLE_CHEST[level];
+if(!randomIndexes.length) {
+   randomIndexes=Array.from({length:deck.length},(_,i)=>i).sort(()=>Math.random()-0.5);
+	console.log(deck.length);
+	console.log("onload:"+randomIndexes);
+	deckcounter=0;
+}
+
 const LEVEL_LABEL={easy:'🌸 Soft Play',medium:'💋 Flirty',hard:'🔥 Spicy'};
 function tagLabel(t){return{go:'Move Forward',back:'Go Back',skip:'Skip Turn',bonus:'Challenge',card:'Draw a Card'}[t]||'Action';}
 function tagClass(t){return{go:'tag-go',back:'tag-back',skip:'tag-skip',bonus:'tag-bonus',card:'tag-bonus'}[t]||'tag-bonus';}
+
 
 // floating hearts bg
 const hbg=document.getElementById('heartsBg');
@@ -583,7 +592,7 @@ function renderBoard(){
 function setLevel(l){
   selectedId=null;
   level=l;
-  randomIndexes=[]; // Reset cards when changing difficulty
+  //randomIndexes=[]; // Reset cards when changing difficulty
   document.querySelectorAll('.lvl-btn,.clvl').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.lvl-btn.'+l+',.clvl.'+l).forEach(b=>b.classList.add('active'));
   renderBoard(); // Drop highlight when switching levels
@@ -636,14 +645,9 @@ bs.addEventListener('touchend',e=>{if(e.changedTouches[0].clientY-bsStartY>60) c
 function openCardModal(type){
   if(currentCardType !== type) {
     currentCardType = type;
-    randomIndexes = []; // Force reshuffle when changing deck types
+   // randomIndexes = []; // Force reshuffle when changing deck types
   }
 
-  const deck=currentCardType==='twist'?LOVE_TWIST[level]:COUPLE_CHEST[level];
-  if(!randomIndexes.length) {
-    randomIndexes=Array.from({length:deck.length},(_,i)=>i).sort(()=>Math.random()-0.5);
-    deckcounter=0;
-  }
   
   const isChest=type==='chest';
   const header=document.getElementById('modalHeader');
@@ -667,6 +671,8 @@ function drawCard(){
   const deck=currentCardType==='twist'?LOVE_TWIST[level]:COUPLE_CHEST[level];
   if(deckcounter>=deck.length){
     randomIndexes=Array.from({length:deck.length},(_,i)=>i).sort(()=>Math.random()-0.5);
+	 console.log("reset");
+    console.log(randomIndexes);
     deckcounter=0;
   }
   const card=deck[randomIndexes[deckcounter++]];
