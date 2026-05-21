@@ -189,12 +189,12 @@ body{
 .modal-header p{font-size:11px;color:#fff9;margin-top:2px;letter-spacing:0.1em;text-transform:uppercase;}
 .modal-level-pill{display:inline-block;margin-top:7px;padding:3px 12px;border-radius:99px;background:#ffffff30;color:#fff;font-size:10px;font-weight:800;letter-spacing:0.07em;}
 .modal-card-area{padding:16px;flex:1;overflow-y:auto;}
-.drawn-card{border-radius:16px;padding:20px 16px;border:2px dashed;font-style:italic;font-size:17px;line-height:1.7;color:#5d4037;animation:cardFlip 0.38s ease-out;position:relative;}
+.drawn-card{border-radius:16px;padding:16px;border:2px dashed;font-style:italic;font-size:16px;line-height:1.5;color:#5d4037;animation:cardFlip 0.38s ease-out;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;min-height:200px;}
 .drawn-card.twist{background:#f9f0ff;border-color:var(--purple-light);}
 .drawn-card.chest{background:#fff0f5;border-color:var(--pink);}
 @keyframes cardFlip{from{transform:rotateY(80deg);opacity:0;}to{transform:rotateY(0);opacity:1;}}
-.card-no{display:block;font-size:11px;font-weight:900;letter-spacing:0.1em;opacity:0.5;margin-bottom:8px;text-transform:uppercase;}
-.card-icon{font-size:34px;display:block;margin-bottom:10px;}
+.card-no{font-size:10px;font-weight:900;letter-spacing:0.1em;opacity:0.5;text-transform:uppercase;}
+.card-icon{font-size:32px;line-height:1;}
 .modal-btns{display:flex;gap:10px;padding:0 16px 16px;flex-shrink:0;}
 .draw-again-btn{flex:1;padding:13px;border-radius:50px;border:none;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;letter-spacing:0.05em;cursor:pointer;transition:all 0.18s;}
 .draw-again-btn.twist{background:linear-gradient(135deg,var(--purple),var(--purple-light));color:#fff;}
