@@ -314,129 +314,137 @@ const BOXES=[
   {n:"Love Note",e:"💌"},
 ];
 
-const LOVE_TWIST=[
+const CARD_DECK=[
 	{
 		no:"01",
-		easy:{icon:"🎴",text:"Swap seats and play your partner's next turn for them."},
-		medium:{icon:"🎴",text:"Switch roles — your partner gives the orders for the next 2 turns."},
-		hard:{icon:"🔥",text:"Your partner blindfolds you and leads you to a surprise spot in the room."}
+		twist:{
+			easy:{icon:"🎴",text:"Swap seats and play your partner's next turn for them."},
+			medium:{icon:"🎴",text:"Switch roles — your partner gives the orders for the next 2 turns."},
+			hard:{icon:"🔥",text:"Your partner blindfolds you and leads you to a surprise spot in the room."}
+		},
+		chest:{
+			easy:{icon:"💝",text:"Open the chest! Both players move forward 1 space."},
+			medium:{icon:"💎",text:"Chest jackpot! Both players move forward 2 spaces."},
+			hard:{icon:"🔥",text:"Inferno chest! Both players remove one item of clothing."}
+		}
 	},
     {
 		no:"02",
-		easy:{icon:"💌",text:"Write a love word on your partner's hand with your finger."},
-		medium:{icon:"💋",text:"Kiss your partner in a spot they least expect."},
-		hard:{icon:"💋",text:"Kiss for 20 full seconds — no breaking away."}
+		twist:{
+			easy:{icon:"💌",text:"Write a love word on your partner's hand with your finger."},
+			medium:{icon:"💋",text:"Kiss your partner in a spot they least expect."},
+			hard:{icon:"💋",text:"Kiss for 20 full seconds — no breaking away."}
+		},
+		chest:{
+			easy:{icon:"🎀",text:"Surprise gift — give your partner something from your pocket or bag."},
+			medium:{icon:"🎯",text:"Dare chest: pick the spiciest dare on the board and do it."},
+			hard:{icon:"😈",text:"Naughty chest: your partner dares you — no refusals allowed."}
+		}
 	},	
     {
 		no:"03",
-		easy:{icon:"🎵",text:"Hum your favourite song together until someone guesses it."},
-		medium:{icon:"📱",text:"Share the last photo on your camera roll and explain it."},
-		hard:{icon:"😈",text:"Tell your wildest fantasy out loud — no skipping allowed."}
+		twist:{
+			easy:{icon:"🎵",text:"Hum your favourite song together until someone guesses it."},
+			medium:{icon:"📱",text:"Share the last photo on your camera roll and explain it."},
+			hard:{icon:"😈",text:"Tell your wildest fantasy out loud — no skipping allowed."}
+		},
+		chest:{
+			easy:{icon:"📸",text:"Take a couple selfie right now and set it as your wallpaper."},
+			medium:{icon:"🔐",text:"Locked chest — confess a secret to unlock it and earn a free turn."},
+			hard:{icon:"💋",text:"Chest command: kiss passionately for 30 full seconds."}
+		}
 	},	  
     {
 		no:"04",
-		easy:{icon:"🌹",text:"Give your partner three genuine compliments right now."},
-		medium:{icon:"🔥",text:"Tell your partner the most attractive thing they did this week."},
-		hard:{icon:"🎴",text:"Your partner controls your next 3 turns completely."}
+		twist:{
+			easy:{icon:"🌹",text:"Give your partner three genuine compliments right now."},
+			medium:{icon:"🔥",text:"Tell your partner the most attractive thing they did this week."},
+			hard:{icon:"🎴",text:"Your partner controls your next 3 turns completely."}
+		},
+		chest:{
+			easy:{icon:"🌹",text:"The chest says: give your partner a 1-minute hand massage."},
+			medium:{icon:"🌙",text:"Night chest: lights off for 2 minutes — enjoy the moment together."},
+			hard:{icon:"🔑",text:"Secret chest: both reveal one thing you've always wanted to try."}
+		}
 	},  
     {
 		no:"05",
-		easy:{icon:"🪞",text:"Mirror everything your partner does for 30 seconds."},
-		medium:{icon:"🎭",text:"Act out how you fell in love — your partner has to guess the scene."},
-		hard:{icon:"🔑",text:"Unlock one secret you have never told anyone — share it now."}
+		twist:{
+			easy:{icon:"🪞",text:"Mirror everything your partner does for 30 seconds."},
+			medium:{icon:"🎭",text:"Act out how you fell in love — your partner has to guess the scene."},
+			hard:{icon:"🔑",text:"Unlock one secret you have never told anyone — share it now."}
+		},
+		chest:{
+			easy:{icon:"🍫",text:"Share a sweet treat — if none available, share a sweet kiss instead."},
+			medium:{icon:"🍾",text:"Celebration chest! Take a drink and move forward 2."},
+			hard:{icon:"🌶️",text:"Spice chest: both do the boldest dare on the board."}
+		}
 	},
 	{
 		no:"06",
-		easy:{icon:"🎁",text:"Promise your partner one favour they can cash anytime."},
-		medium:{icon:"🎯",text:"Dare your partner to do one thing they've never done before."},
-		hard:{icon:"🌶️",text:"Remove one item of clothing and leave it off for 2 rounds."}
+		twist:{
+			easy:{icon:"🎁",text:"Promise your partner one favour they can cash anytime."},
+			medium:{icon:"🎯",text:"Dare your partner to do one thing they've never done before."},
+			hard:{icon:"🌶️",text:"Remove one item of clothing and leave it off for 2 rounds."}
+		},
+		chest:{
+			easy:{icon:"💌",text:"Both write one thing you love about each other and swap notes."},
+			medium:{icon:"💋",text:"Chest says: 10-second kiss, then both pick a dare card."},
+			hard:{icon:"🎭",text:"Role play chest: pick a fun scene and act it out for 3 minutes."}
+		}
 	},
     {
 		no:"07",
-		easy:{icon:"👀",text:"Stare into each other's eyes and don't blink for 15 seconds."},
-		medium:{icon:"🌙",text:"Describe your perfect night in together in vivid detail."},
-		hard:{icon:"👁️",text:"Gaze into each other's eyes for 60 seconds in complete silence."}
+		twist:{
+			easy:{icon:"👀",text:"Stare into each other's eyes and don't blink for 15 seconds."},
+			medium:{icon:"🌙",text:"Describe your perfect night in together in vivid detail."},
+			hard:{icon:"👁️",text:"Gaze into each other's eyes for 60 seconds in complete silence."}
+		},
+		chest:{
+			easy:{icon:"🕯️",text:"Dim the lights and sit close for the rest of this round."},
+			medium:{icon:"🎁",text:"Mystery gift — your partner owes you one favour, no questions asked."},
+			hard:{icon:"👁️",text:"Intensity chest: maintain eye contact for 90 seconds. No laughing."}
+		}
 	},
    	{
 		no:"08",
-		easy:{icon:"💃",text:"Dance together for one full minute — no music needed."},
-		medium:{icon:"🤝",text:"Make a secret handshake — you have 60 seconds to create it."},
-		hard:{icon:"🎭",text:"Recreate your steamiest moment together — right now."}
+		twist:{
+			easy:{icon:"💃",text:"Dance together for one full minute — no music needed."},
+			medium:{icon:"🤝",text:"Make a secret handshake — you have 60 seconds to create it."},
+			hard:{icon:"🎭",text:"Recreate your steamiest moment together — right now."}
+		},
+		chest:{
+			easy:{icon:"🎶",text:"Play your couple song — if you don't have one, pick one now!"},
+			medium:{icon:"🕺",text:"Dance chest: slow dance for 2 full minutes right now."},
+			hard:{icon:"🎯",text:"Bull's-eye chest: your partner names it, you do it."}
+		}
 	},
 	{
 		no:"09",
-		easy:{icon:"🤫",text:"Whisper your favourite memory of your partner in their ear."},
-		medium:{icon:"🍷",text:"Take turns: one thing you love, one thing you want more of."},
-	    hard:{icon:"🤫",text:"Whisper the boldest thing you want to do tonight."}
+		twist:{
+			easy:{icon:"🤫",text:"Whisper your favourite memory of your partner in their ear."},
+			medium:{icon:"🍷",text:"Take turns: one thing you love, one thing you want more of."},
+			hard:{icon:"🤫",text:"Whisper the boldest thing you want to do tonight."}
+		},
+		chest:{
+			easy:{icon:"🤗",text:"Free hug! Hold each other for a full 10 seconds."},
+			medium:{icon:"📖",text:"Story chest: take turns adding sentences to a romantic story."},
+			hard:{icon:"🌙",text:"Midnight chest: plan something intimate for tonight and share details now."}
+		}
 	},
     {
 		no:"10",
-		easy:{icon:"🍬",text:"Feed each other something sweet without using your hands."},
-		medium:{icon:"🎲",text:"Roll again — but this time your partner picks your action."},
-	    hard:{icon:"💃",text:"Give your partner the slowest, most romantic dance of their life."}
-	}
-];
-
-const COUPLE_CHEST = [
-	{
-		no: "01",
-		easy:{icon:"💝",text:"Open the chest! Both players move forward 1 space."},
-		medium:{icon:"💎",text:"Chest jackpot! Both players move forward 2 spaces."},
-		hard:{icon:"🔥",text:"Inferno chest! Both players remove one item of clothing."}
-	},
-	{
-		no: "02",
-		easy:{icon:"🎀",text:"Surprise gift — give your partner something from your pocket or bag."},
-		medium:{icon:"🎯",text:"Dare chest: pick the spiciest dare on the board and do it."},
-		hard:{icon:"😈",text:"Naughty chest: your partner dares you — no refusals allowed."}
-	},
-	{
-		no: "03",
-		easy:{icon:"📸",text:"Take a couple selfie right now and set it as your wallpaper."},
-		medium:{icon:"🔐",text:"Locked chest — confess a secret to unlock it and earn a free turn."},
-		hard:{icon:"💋",text:"Chest command: kiss passionately for 30 full seconds."}
-	},
-	{
-		no: "04",
-		easy:{icon:"🌹",text:"The chest says: give your partner a 1-minute hand massage."},
-		medium:{icon:"🌙",text:"Night chest: lights off for 2 minutes — enjoy the moment together."},
-		hard:{icon:"🔑",text:"Secret chest: both reveal one thing you've always wanted to try."}
-	},
-	{
-		no: "05",
-		easy:{icon:"🍫",text:"Share a sweet treat — if none available, share a sweet kiss instead."},
-		medium:{icon:"🍾",text:"Celebration chest! Take a drink and move forward 2."},
-		hard:{icon:"🌶️",text:"Spice chest: both do the boldest dare on the board."}
-	},
-	{
-		no: "06",
-		easy:{icon:"💌",text:"Both write one thing you love about each other and swap notes."},
-		medium:{icon:"💋",text:"Chest says: 10-second kiss, then both pick a dare card."},
-		hard:{icon:"🎭",text:"Role play chest: pick a fun scene and act it out for 3 minutes."}
-	},
-	{
-		no: "07",
-		easy:{icon:"🕯️",text:"Dim the lights and sit close for the rest of this round."},
-		medium:{icon:"🎁",text:"Mystery gift — your partner owes you one favour, no questions asked."},
-		hard:{icon:"👁️",text:"Intensity chest: maintain eye contact for 90 seconds. No laughing."}
-	},
-	{
-		no: "08",
-		easy:{icon:"🎶",text:"Play your couple song — if you don't have one, pick one now!"},
-		medium:{icon:"🕺",text:"Dance chest: slow dance for 2 full minutes right now."},
-		hard:{icon:"🎯",text:"Bull's-eye chest: your partner names it, you do it."}
-	},
-	{
-		no: "09",
-		easy:{icon:"🤗",text:"Free hug! Hold each other for a full 10 seconds."},
-		medium:{icon:"📖",text:"Story chest: take turns adding sentences to a romantic story."},
-		hard:{icon:"🌙",text:"Midnight chest: plan something intimate for tonight and share details now."}
-	},
-	{
-		no: "10",
-		easy:{icon:"⭐",text:"Jackpot! Both players skip their next penalty."},
-		medium:{icon:"🃏",text:"Wild chest! Draw a Love Twist card on top of this action."},
-		hard:{icon:"💝",text:"Grand jackpot! Skip any 2 penalties AND draw a Love Twist card."}
+		twist:{
+			easy:{icon:"🍬",text:"Feed each other something sweet without using your hands."},
+			medium:{icon:"🎲",text:"Roll again — but this time your partner picks your action."},
+			hard:{icon:"💃",text:"Give your partner the slowest, most romantic dance of their life."}
+		},
+		chest:{
+			easy:{icon:"⭐",text:"Jackpot! Both players skip their next penalty."},
+			medium:{icon:"🃏",text:"Wild chest! Draw a Love Twist card on top of this action."},
+			hard:{icon:"💝",text:"Grand jackpot! Skip any 2 penalties AND draw a Love Twist card."}
+		}
+		
 	}
 ];
 
@@ -569,19 +577,26 @@ const ACTIONS={
   ]
 };
 
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+
 const TILE_BGS=['#012768','#684797','#ED6C7D','#0290C0','#EA6B7B','#E22727','#226C9D','#FCE8D2','#013D7D','#6F4B97','#BE0E25','#015B9C','#FDE363','#3F9154','#E47190','#DA1920','#0551A7','#E86D7E','#F76910','#0b8dc9','#013371','#d2020c','#fbe9d3','#fc6801','#6a34a7','#e11a23','#1c98c4','#fdcf2a','#3d9758','#e86d7e','#cc182f','#0794b7','#398853','#ec677b','#207db6','#e1252b','#fbebd5','#1c78b6','#fde569','#489a5f'];
 
 let level='easy', selectedId=null, currentCardType=null;
-let deckcounter=0, randomIndexes=[];
-//const deck=currentCardType==='twist'?LOVE_TWIST[level]:COUPLE_CHEST[level];
-const deck=currentCardType==='twist'?LOVE_TWIST:COUPLE_CHEST;
-if(!randomIndexes.length) {
-   randomIndexes=Array.from({length:deck.length},(_,i)=>i).sort(()=>Math.random()-0.5);
-	console.log(deck.length);
-	console.log("onload:"+randomIndexes);
-	deckcounter=0;
-}
+const randomIndexes = {
+  twist: [],
+  chest: []
+};
 
+const deckcounter = {
+  twist: 0,
+  chest: 0
+};
 const LEVEL_LABEL={easy:'🌸 Soft Play',medium:'💋 Flirty',hard:'🔥 Spicy'};
 function tagLabel(t){return{go:'Move Forward',back:'Go Back',skip:'Skip Turn',bonus:'Challenge',card:'Draw a Card'}[t]||'Action';}
 function tagClass(t){return{go:'tag-go',back:'tag-back',skip:'tag-skip',bonus:'tag-bonus',card:'tag-bonus'}[t]||'tag-bonus';}
@@ -610,7 +625,7 @@ function renderBoard(){
   // Detect if Desktop layout is active to set columns dynamically
   const isDesktop = window.matchMedia("(min-width: 768px), (orientation: landscape) and (max-height: 600px)").matches;
   const cols = isDesktop ? 8 : 5;
-  const rows = 40 / cols; // Calculate total rows (8 for mobile, 5 for desktop)
+  const rows =  Math.ceil(BOXES.length / cols); // Calculate total rows (8 for mobile, 5 for desktop)
   currentCols = cols;
 
   BOXES.forEach((b, i) => {
@@ -646,7 +661,6 @@ function renderBoard(){
 function setLevel(l){
   selectedId=null;
   level=l;
-  //randomIndexes=[]; // Reset cards when changing difficulty
   document.querySelectorAll('.lvl-btn,.clvl').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.lvl-btn.'+l+',.clvl.'+l).forEach(b=>b.classList.add('active'));
   renderBoard(); // Drop highlight when switching levels
@@ -697,12 +711,7 @@ bs.addEventListener('touchstart',e=>{bsStartY=e.touches[0].clientY;},{passive:tr
 bs.addEventListener('touchend',e=>{if(e.changedTouches[0].clientY-bsStartY>60) closeBottomSheet();},{passive:true});
 
 function openCardModal(type){
-  if(currentCardType !== type) {
-    currentCardType = type;
-   // randomIndexes = []; // Force reshuffle when changing deck types
-  }
-
-  
+  currentCardType = type;
   const isChest=type==='chest';
   const header=document.getElementById('modalHeader');
   header.className='modal-header '+(isChest?'chest':'twist');
@@ -722,18 +731,31 @@ function openCardModal(type){
 }
 
 function drawCard(){
+	if(!currentCardType) return;
   //const deck=currentCardType==='twist'?LOVE_TWIST[level]:COUPLE_CHEST[level];
-  const deck=currentCardType==='twist'?LOVE_TWIST:COUPLE_CHEST;
-  if(deckcounter>=deck.length){
-    randomIndexes=Array.from({length:deck.length},(_,i)=>i).sort(()=>Math.random()-0.5);
-	 console.log("reset");
-    console.log(randomIndexes);
-    deckcounter=0;
+  const deck=CARD_DECK;
+  if(!randomIndexes[currentCardType].length) {
+   randomIndexes[currentCardType] = shuffle(
+		Array.from({length:deck.length},(_,i)=>i)
+		);
+	console.log("onload:"+":"+currentCardType+":"+randomIndexes[currentCardType]);
+	
+}
+
+  if(deckcounter[currentCardType] >= deck.length){
+	 randomIndexes[currentCardType] = shuffle(
+	  Array.from({length:deck.length},(_,i)=>i)
+	);
+    console.log("reset:"+":"+currentCardType+":"+randomIndexes[currentCardType]);
+	deckcounter[currentCardType]=0;
   }
-  const card=deck[randomIndexes[deckcounter]];
+  const index = randomIndexes[currentCardType][deckcounter[currentCardType]];
+
+	const card = deck[index];
+	const cardAction = card[currentCardType][level];
+
   const cardEl=document.getElementById('drawnCard');
-  const cardAction=deck[randomIndexes[deckcounter]][level];
-  deckcounter++;
+  deckcounter[currentCardType]++;
   cardEl.style.animation='none';cardEl.offsetHeight;cardEl.style.animation='cardFlip 0.38s ease-out';
   document.getElementById('cardNo').textContent="CARD #"+card.no;
   document.getElementById('cardIcon').textContent=cardAction.icon;
