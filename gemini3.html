@@ -210,13 +210,39 @@ body{
 
 /* hearts bg */
 .hearts-bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
-.hbg{position:absolute;animation:hbgfloat linear infinite;opacity:0.08;}
+.hbg{position:absolute;animation:hbgfloat linear infinite;opacity:0.08;will-change: transform, opacity;}
 
+/*
 @keyframes hbgfloat{
   0%{transform:translateY(0) rotate(0deg);opacity:0;}
   10%{opacity:0.15;}
   90%{opacity:0.1;}
   100%{transform:translateY(-110vh) rotate(360deg);opacity:0;}
+}
+ */
+@keyframes hbgfloat{
+
+  0%{
+    transform:
+      translate3d(0,0,0)
+      rotate(0deg);
+    opacity:0;
+  }
+
+  10%{
+    opacity:0.15;
+  }
+
+  90%{
+    opacity:0.1;
+  }
+
+  100%{
+    transform:
+      translate3d(0,-110vh,0)
+      rotate(360deg);
+    opacity:0;
+  }
 }
 
 /* ── DESKTOP & LANDSCAPE MEDIA QUERIES ── */
