@@ -88,37 +88,41 @@ body{
 .clvl.medium.active{background:linear-gradient(145deg,#fce4ec,#ffb3c6);border-color:var(--pink);color:#880e4f;transform:scale(1.05);box-shadow:0 2px 8px #e91e6355;}
 .clvl.hard.active{background:linear-gradient(145deg,#ffd6e7,#f48fb1);border-color:var(--pink-dark);color:#560027;transform:scale(1.05);box-shadow:0 2px 8px #c2185b66;}
 
-/* ── BOARD AREA (5x8 GRID) ── */
+/* ── BOARD AREA (RESPONSIVE GRID) ── */
 .board-section{
-  flex:1;
-  overflow-y:auto; /* Allows scrolling if board is tall */
-  padding:16px;
-  display:flex;
-  flex-direction: column;
-  align-items:center; /* Horizontally center */
-  justify-content:flex-start; /* Ensure top never cuts off */
+  flex: 1;
+  overflow: hidden; /* Force bounds to prevent scrolling/cutting off */
+  padding: 12px;
+  padding-bottom: calc(12px + var(--safe-bottom));
+  display: flex;
+  align-items: center; /* Horizontally center */
+  justify-content: center; /* Vertically center */
+  min-height: 0; /* Important flex fix */
 }
 .board{
-  display:grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(8, 1fr);
-  gap:4px;
-  width:100%;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-rows: repeat(8, minmax(0, 1fr));
+  gap: 4px;
+  width: 100%;
   max-width: 600px;
-  margin: auto 0; /* Safe vertical center if screen is taller than board */
-  background:linear-gradient(145deg,#ad1457,#880e4f);
-  padding:6px;border-radius:16px;
-  box-shadow:0 8px 32px #880e4f44,inset 0 1px 0 #ffffff22;
-  flex-shrink: 0; /* Prevent board from collapsing oddly */
+  height: 100%; /* Let it perfectly fill the remaining space */
+  max-height: 100%;
+  margin: auto;
+  background: linear-gradient(145deg,#ad1457,#880e4f);
+  padding: 6px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px #880e4f44, inset 0 1px 0 #ffffff22;
+  flex-shrink: 1;
+  min-height: 0;
 }
 .tile{
-  min-width:0;min-height:0;border:none;border-radius:6px;
-  cursor:pointer;padding:2px;display:flex;align-items:center;justify-content:center;
-  transition:transform 0.15s,box-shadow 0.12s;
-  box-shadow:inset 0 1px 0 #ffffff44;
-  position:relative;
-  -webkit-user-select:none;user-select:none;
-  aspect-ratio: 1; /* Makes tiles perfectly square */
+  min-width: 0; min-height: 0; border: none; border-radius: 6px;
+  cursor: pointer; padding: 2px; display: flex; align-items: center; justify-content: center;
+  transition: transform 0.15s, box-shadow 0.12s;
+  box-shadow: inset 0 1px 0 #ffffff44;
+  position: relative;
+  -webkit-user-select: none; user-select: none;
 }
 .tile:active{transform:scale(0.93);}
 .tile.active{z-index:5;}
@@ -221,8 +225,8 @@ body{
     padding: 24px;
   }
   .board {
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 1fr));
     max-width: 800px;
   }
 }
@@ -232,26 +236,23 @@ body{
     padding: 4px 12px; /* Smaller header padding for extra vertical space */
   }
   .board-section {
-    padding: 8px;
+    padding: 6px;
+    padding-bottom: calc(6px + var(--safe-bottom));
   }
   .board {
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(5, 1fr);
-    width: auto;
-    max-width: none;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 1fr));
+    width: 100%;
+    max-width: 900px;
     height: 100%; /* Shrink board to fit the small screen height exactly */
     max-height: 100%;
-    aspect-ratio: 8 / 5; /* Maintain perfectly square boxes */
     margin: auto; /* Keep it beautifully centered */
   }
-  .tile {
-    aspect-ratio: auto; /* Let the container's aspect ratio dictate the square shape */
-  }
   .tile .ticon {
-    font-size: clamp(14px, 7vh, 28px); /* Scale text with screen height */
+    font-size: clamp(14px, 5vh, 26px); /* Scale text with screen height */
   }
   .tile .tnum {
-    font-size: clamp(10px, 4vh, 16px);
+    font-size: clamp(10px, 3vh, 14px);
   }
 }
 </style>
